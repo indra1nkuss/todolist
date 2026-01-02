@@ -1,6 +1,6 @@
 // src/components/AuditItem.jsx
 import { useState, useRef, useEffect } from 'react';
-import { supabase } from '../supabaseClient';
+import { supabase } from '../supabaseClient.js';
 
 const statusConfig = {
     not_started: { 

@@ -1,6 +1,6 @@
 // src/components/AuthCallback.jsx
 import { useEffect, useState } from 'react'
-import { supabase } from '../supabaseClient'
+import { supabase } from '../supabaseClient.js'
 
 export default function AuthCallback() {
   const [status, setStatus] = useState('loading')

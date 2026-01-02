@@ -1,9 +1,9 @@
 // src/App.jsx
 import { useState, useEffect } from 'react'
-import { supabase } from './supabaseClient'
-import Login from './components/Login'
-import Dashboard from './components/Dashboard'
-import AuthCallback from './components/AuthCallback' // [1] Import komponen ini
+import { supabase } from './supabaseClient.js'
+import Login from './components/Login.jsx'
+import Dashboard from './components/Dashboard.jsx'
+import AuthCallback from './components/AuthCallback.jsx' // [1] Import komponen ini
 import './App.css'
 
 function App() {

@@ -1,6 +1,6 @@
 // src/components/Login.jsx
 import { useState } from 'react'
-import { supabase } from '../supabaseClient'
+import { supabase } from '../supabaseClient.js'
 
 export default function Login() {
   const [loading, setLoading] = useState(false)

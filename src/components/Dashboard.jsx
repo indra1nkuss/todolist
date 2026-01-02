@@ -1,8 +1,8 @@
 // src/components/Dashboard.jsx
 import { useState, useEffect } from 'react';
-import { supabase } from '../supabaseClient';
-import AuditItem from './AuditItem';
-import MasterItemManager from './MasterItemManager';
+import { supabase } from '../supabaseClient.js';
+import AuditItem from './AuditItem.jsx';
+import MasterItemManager from './MasterItemManager.jsx';
 
 export default function Dashboard({ session }) {
     const [loading, setLoading] = useState(true);
