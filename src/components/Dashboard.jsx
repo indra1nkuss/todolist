@@ -152,10 +152,12 @@ export default function Dashboard({ session }) {
                 </div>
             </nav>
 
+            {/* Main Content Wrapper - Updated paddingBottom here */}
             <main style={{
                 maxWidth: '1024px',
                 margin: '0 auto',
-                padding: '2rem 1.5rem'
+                padding: '2rem 1.5rem',
+                paddingBottom: '200px' // <--- PERBAIKAN DI SINI (Supaya bisa scroll jauh ke bawah)
             }}>
                 
                 {/* Master Item Manager */}

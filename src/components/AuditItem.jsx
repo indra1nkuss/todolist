@@ -169,7 +169,7 @@ export default function AuditItem({ item, yearlyData, year, onUpdate }) {
                                 right: 0,
                                 top: '100%', // Menempel tepat di bawah tombol
                                 paddingTop: '0.5rem', // Menggunakan padding sebagai 'jembatan', bukan margin
-                                zIndex: 10,
+                                zIndex: 9999, // <--- PERBAIKAN DI SINI (Layer paling atas)
                             }}>
                                 {/* Container Visual Menu (Lapis Dalam) */}
                                 <div style={{
