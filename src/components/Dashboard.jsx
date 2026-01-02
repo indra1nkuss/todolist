@@ -82,12 +82,7 @@ export default function Dashboard({ session }) {
                         <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#667eea" strokeWidth="2">
                             <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
                         </svg>
-                        <h1 style={{
-                            fontSize: '1.25rem',
-                            fontWeight: 'bold',
-                            color: '#1e3a8a',
-                            letterSpacing: '-0.025em'
-                        }}>
+                        <h1 style={{ fontSize: '1.25rem', fontWeight: 'bold', color: '#1e3a8a' }}>
                             Energy Audit Tracker
                         </h1>
                     </div>
@@ -103,7 +98,6 @@ export default function Dashboard({ session }) {
                                 borderRadius: '0.5rem',
                                 border: 'none',
                                 cursor: 'pointer',
-                                transition: 'all 0.2s',
                                 backgroundColor: showMasterManager ? '#eff6ff' : 'transparent',
                                 color: showMasterManager ? '#1e40af' : '#4b5563'
                             }}
@@ -112,28 +106,13 @@ export default function Dashboard({ session }) {
                             Kelola Dokumen
                         </button>
                         
-                        <span style={{ 
-                            fontSize: '0.875rem', 
-                            color: '#6b7280',
-                            display: window.innerWidth > 768 ? 'block' : 'none'
-                        }}>
-                            {session.user.email}
-                        </span>
-                        
                         <button
                             onClick={handleLogout}
                             style={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                fontSize: '0.875rem',
-                                color: '#dc2626',
-                                fontWeight: '500',
-                                background: 'transparent',
-                                border: 'none',
-                                cursor: 'pointer'
+                                fontSize: '0.875rem', color: '#dc2626', fontWeight: '500',
+                                background: 'transparent', border: 'none', cursor: 'pointer'
                             }}
                         >
-                            <span style={{ marginRight: '0.25rem' }}>🚪</span>
                             Logout
                         </button>
                     </div>
@@ -144,167 +123,116 @@ export default function Dashboard({ session }) {
                 maxWidth: '1024px',
                 margin: '0 auto',
                 padding: '2rem 1.5rem',
-                // PENTING: Padding bawah extra besar agar item terakhir bisa discroll naik
-                paddingBottom: '300px' 
+                // PENTING: Ruang kosong di bawah agar item terakhir bisa discroll naik
+                paddingBottom: '350px' 
             }}>
                 
                 {showMasterManager && (
-                    <MasterItemManager 
-                        onClose={() => setShowMasterManager(false)} 
-                        onRefresh={fetchData} 
-                    />
+                    <MasterItemManager onClose={() => setShowMasterManager(false)} onRefresh={fetchData} />
                 )}
 
-                {/* Header & Year Selector */}
+                {/* Header Section */}
                 <div style={{
                     display: 'flex',
                     flexDirection: window.innerWidth > 768 ? 'row' : 'column',
                     justifyContent: 'space-between',
                     alignItems: window.innerWidth > 768 ? 'center' : 'flex-start',
-                    marginBottom: '2rem',
-                    gap: '1rem'
+                    marginBottom: '2rem'
                 }}>
                     <div>
-                        <h2 style={{ fontSize: '1.875rem', fontWeight: 'bold', color: '#111827' }}>
-                            Dashboard Audit
-                        </h2>
-                        <p style={{ marginTop: '0.25rem', fontSize: '0.875rem', color: '#6b7280' }}>
-                            Status kelengkapan dokumen FEM & ISO 50001
-                        </p>
+                        <h2 style={{ fontSize: '1.875rem', fontWeight: 'bold', color: '#111827' }}>Dashboard Audit</h2>
+                        <p style={{ marginTop: '0.25rem', color: '#6b7280' }}>Status kelengkapan dokumen</p>
                     </div>
                     
                     <div style={{
-                        display: 'flex',
-                        alignItems: 'center',
+                        marginTop: window.innerWidth > 768 ? 0 : '1rem',
                         backgroundColor: 'white',
-                        padding: '0.75rem 1rem',
-                        borderRadius: '0.75rem',
-                        boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
-                        border: '1px solid #e5e7eb'
+                        padding: '0.5rem 1rem',
+                        borderRadius: '0.5rem',
+                        border: '1px solid #e5e7eb',
+                        display: 'flex',
+                        alignItems: 'center'
                     }}>
                         <span style={{ marginRight: '0.5rem' }}>📅</span>
                         <select
                             value={selectedYear}
                             onChange={(e) => setSelectedYear(parseInt(e.target.value))}
-                            style={{
-                                background: 'transparent',
-                                fontWeight: 'bold',
-                                fontSize: '1.125rem',
-                                color: '#374151',
-                                border: 'none',
-                                cursor: 'pointer',
-                                outline: 'none'
-                            }}
+                            style={{ border: 'none', fontSize: '1rem', fontWeight: 'bold' }}
                         >
-                            {availableYears.map(yr => (
-                                <option key={yr} value={yr}>{yr}</option>
-                            ))}
+                            {availableYears.map(yr => <option key={yr} value={yr}>{yr}</option>)}
                         </select>
                     </div>
                 </div>
 
                 {/* Progress Bar */}
                 <div style={{
-                    backgroundColor: 'white',
-                    borderRadius: '1rem',
-                    boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
-                    border: '1px solid #e5e7eb',
-                    padding: '1.5rem',
-                    marginBottom: '1.5rem'
+                    backgroundColor: 'white', padding: '1.5rem', borderRadius: '1rem',
+                    boxShadow: '0 1px 3px rgba(0,0,0,0.1)', marginBottom: '2rem'
                 }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
-                        <span style={{ fontSize: '0.875rem', fontWeight: '500', color: '#374151' }}>
-                            Progress Tahun {selectedYear}
-                        </span>
-                        <span style={{ fontSize: '0.875rem', fontWeight: 'bold', color: '#667eea' }}>
-                            {progressPercentage}%
-                        </span>
+                        <span>Progress {selectedYear}</span>
+                        <strong>{progressPercentage}%</strong>
                     </div>
-                    <div style={{
-                        width: '100%',
-                        backgroundColor: '#e5e7eb',
-                        borderRadius: '9999px',
-                        height: '0.75rem',
-                        overflow: 'hidden'
-                    }}>
-                        <div style={{
-                            background: 'linear-gradient(to right, #667eea, #22c55e)',
-                            height: '100%',
-                            width: `${progressPercentage}%`,
-                            transition: 'width 0.5s ease'
-                        }} />
+                    <div style={{ width: '100%', height: '10px', background: '#e5e7eb', borderRadius: '10px', overflow: 'hidden' }}>
+                        <div style={{ width: `${progressPercentage}%`, height: '100%', background: '#10b981', transition: 'width 0.5s' }}></div>
                     </div>
                 </div>
 
-                {/* Main Content List */}
+                {/* Main List Container */}
                 {loading ? (
-                    <div style={{ padding: '5rem 0', textAlign: 'center', color: '#9ca3af' }}>
-                        <div className="spinner" style={{ marginBottom: '1rem' }} />
-                        <p>Memuat data...</p>
-                    </div>
+                    <p style={{ textAlign: 'center', marginTop: '2rem' }}>Memuat data...</p>
                 ) : (
                     <div style={{
                         backgroundColor: 'white',
                         boxShadow: '0 4px 12px rgba(0,0,0,0.08)',
-                        // PERBAIKAN UTAMA DI SINI:
-                        // overflow: 'hidden' DIHAPUS supaya dropdown bisa keluar batas kotak
-                        overflow: 'visible', 
                         borderRadius: '1rem',
                         border: '1px solid #e5e7eb',
-                        position: 'relative', // Supaya z-index bekerja dengan benar
+                        // 🔴 KUNCI 1: Hapus overflow hidden, ganti visible
+                        overflow: 'visible', 
+                        position: 'relative',
                         zIndex: 1
                     }}>
+                        {/* Header List */}
                         <div style={{
                             padding: '1.5rem',
-                            background: 'linear-gradient(to right, #eff6ff, #d1fae5)',
                             borderBottom: '1px solid #e5e7eb',
-                            display: 'flex',
-                            justifyContent: 'space-between',
-                            alignItems: 'center',
-                            // Kembalikan border radius atas manual karena overflow hidden dihapus
+                            background: '#f3f4f6',
                             borderTopLeftRadius: '1rem',
                             borderTopRightRadius: '1rem'
                         }}>
-                            <h3 style={{ fontSize: '1.125rem', fontWeight: 'bold', color: '#111827' }}>
-                                Checklist
-                            </h3>
-                            <span style={{
-                                fontSize: '0.75rem',
-                                fontWeight: '500',
-                                backgroundColor: '#dbeafe',
-                                color: '#1e40af',
-                                padding: '0.25rem 0.75rem',
-                                borderRadius: '9999px'
-                            }}>
-                                Total: {totalItems}
-                            </span>
+                            <h3 style={{ fontWeight: 'bold' }}>Checklist Dokumen</h3>
                         </div>
-                        
-                        <div style={{ borderTop: '1px solid #f3f4f6' }}>
-                            {masterItems.length === 0 ? (
-                                <div style={{ padding: '2.5rem', textAlign: 'center' }}>
-                                    <p style={{ color: '#6b7280' }}>Belum ada daftar dokumen.</p>
-                                    <button 
-                                        onClick={() => setShowMasterManager(true)}
-                                        style={{ color: '#667eea', fontWeight: '600', background: 'transparent', border: 'none', cursor: 'pointer', marginTop: '1rem' }}
+
+                        {/* List Items */}
+                        <div style={{ padding: '0' }}>
+                            {masterItems.map((item, index) => {
+                                const statusData = yearlyStatuses.find(s => s.master_item_id === item.id);
+                                
+                                // 🔴 KUNCI 2: Z-INDEX MENURUN
+                                // Item 1 z-index = 1000
+                                // Item 2 z-index = 999
+                                // Item 3 z-index = 998
+                                // ...
+                                // Ini memastikan dropdown item atas SELALU muncul DI ATAS item bawahnya
+                                const itemZIndex = 1000 - index; 
+
+                                return (
+                                    <div 
+                                        key={item.id} 
+                                        style={{ 
+                                            position: 'relative', 
+                                            zIndex: itemZIndex // Terapkan z-index di sini
+                                        }}
                                     >
-                                        + Tambahkan Dokumen
-                                    </button>
-                                </div>
-                            ) : (
-                                masterItems.map((item) => {
-                                    const statusData = yearlyStatuses.find(s => s.master_item_id === item.id);
-                                    return (
                                         <AuditItem
-                                            key={item.id}
                                             item={item}
                                             yearlyData={statusData}
                                             year={selectedYear}
                                             onUpdate={fetchData}
                                         />
-                                    );
-                                })
-                            )}
+                                    </div>
+                                );
+                            })}
                         </div>
                     </div>
                 )}
