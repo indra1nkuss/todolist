@@ -9,7 +9,6 @@ export default function Dashboard({ session }) {
     const [masterItems, setMasterItems] = useState([]);
     const [yearlyStatuses, setYearlyStatuses] = useState([]);
     
-    // Generate years 2023-2035
     const startYear = 2023;
     const endYear = 2035;
     const availableYears = Array.from(
@@ -60,7 +59,7 @@ export default function Dashboard({ session }) {
     const progressPercentage = totalItems > 0 ? Math.round((completedItems / totalItems) * 100) : 0;
 
     return (
-        <div style={{ minHeight: '100vh', backgroundColor: '#f9fafb' }}>
+        <div style={{ minHeight: '100vh', backgroundColor: '#f9fafb', display: 'flex', flexDirection: 'column' }}>
             <nav style={{
                 backgroundColor: 'white',
                 boxShadow: '0 1px 3px rgba(0,0,0,0.05)',
@@ -108,7 +107,7 @@ export default function Dashboard({ session }) {
                 maxWidth: '1024px',
                 margin: '0 auto',
                 padding: '2rem 1.5rem',
-                paddingBottom: '300px' 
+                flex: 1
             }}>
                 
                 {showMasterManager && (
@@ -131,7 +130,7 @@ export default function Dashboard({ session }) {
                         <select
                             value={selectedYear}
                             onChange={(e) => setSelectedYear(parseInt(e.target.value))}
-                            style={{ border: 'none', fontSize: '1rem', fontWeight: 'bold' }}
+                            style={{ border: 'none', fontSize: '1rem', fontWeight: 'bold', cursor: 'pointer' }}
                         >
                             {availableYears.map(yr => <option key={yr} value={yr}>{yr}</option>)}
                         </select>
@@ -143,66 +142,130 @@ export default function Dashboard({ session }) {
                     boxShadow: '0 1px 3px rgba(0,0,0,0.1)', marginBottom: '2rem'
                 }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
-                        <span>Progress {selectedYear}</span>
-                        <strong>{progressPercentage}%</strong>
+                        <span style={{ fontSize: '0.875rem', fontWeight: '500', color: '#6b7280' }}>
+                            Progress {selectedYear}
+                        </span>
+                        <strong style={{ fontSize: '0.875rem', color: '#059669' }}>
+                            {completedItems} / {totalItems} ({progressPercentage}%)
+                        </strong>
                     </div>
                     <div style={{ width: '100%', height: '10px', background: '#e5e7eb', borderRadius: '10px', overflow: 'hidden' }}>
-                        <div style={{ width: `${progressPercentage}%`, height: '100%', background: '#10b981', transition: 'width 0.5s' }}></div>
+                        <div style={{ 
+                            width: `${progressPercentage}%`, 
+                            height: '100%', 
+                            background: 'linear-gradient(90deg, #10b981 0%, #059669 100%)', 
+                            transition: 'width 0.5s ease-in-out',
+                            borderRadius: '10px'
+                        }}></div>
                     </div>
                 </div>
 
                 {loading ? (
-                    <p style={{ textAlign: 'center', marginTop: '2rem' }}>Memuat data...</p>
+                    <div style={{ 
+                        textAlign: 'center', 
+                        marginTop: '4rem',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        gap: '1rem'
+                    }}>
+                        <div style={{
+                            width: '40px',
+                            height: '40px',
+                            border: '4px solid #f3f4f6',
+                            borderTop: '4px solid #667eea',
+                            borderRadius: '50%',
+                            animation: 'spin 1s linear infinite'
+                        }} />
+                        <p style={{ color: '#6b7280' }}>Memuat data...</p>
+                    </div>
                 ) : (
                     <div style={{
                         backgroundColor: 'white',
                         boxShadow: '0 4px 12px rgba(0,0,0,0.08)',
                         borderRadius: '1rem',
                         border: '1px solid #e5e7eb',
-                        overflow: 'visible', // Pastikan tetap visible
-                        position: 'relative',
-                        zIndex: 1
+                        overflow: 'visible',
+                        marginBottom: '3rem'
                     }}>
                         <div style={{
                             padding: '1.5rem',
                             borderBottom: '1px solid #e5e7eb',
-                            background: '#f3f4f6',
+                            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
                             borderTopLeftRadius: '1rem',
                             borderTopRightRadius: '1rem'
                         }}>
-                            <h3 style={{ fontWeight: 'bold' }}>Checklist Dokumen</h3>
+                            <h3 style={{ fontWeight: 'bold', color: 'white', fontSize: '1.125rem' }}>
+                                📋 Checklist Dokumen
+                            </h3>
                         </div>
 
-                        <div style={{ padding: '0' }}>
-                            {masterItems.map((item, index) => {
-                                const statusData = yearlyStatuses.find(s => s.master_item_id === item.id);
-                                
-                                // LOGIKA BARU: Cek apakah ini 3 item terakhir?
-                                // Jika item ke-8, 9, 10 dari total 10 item, maka openUpwards = true
-                                const isBottomItem = index >= masterItems.length - 3;
-                                
-                                // Z-index logic tetap dipertahankan
-                                const itemZIndex = 1000 - index; 
-
-                                return (
-                                    <div 
-                                        key={item.id} 
-                                        style={{ position: 'relative', zIndex: itemZIndex }}
-                                    >
+                        <div style={{ padding: '0', position: 'relative' }}>
+                            {masterItems.length === 0 ? (
+                                <div style={{ 
+                                    padding: '4rem 2rem', 
+                                    textAlign: 'center',
+                                    color: '#6b7280'
+                                }}>
+                                    <p style={{ fontSize: '3rem', marginBottom: '1rem' }}>📝</p>
+                                    <p style={{ fontSize: '1.125rem', fontWeight: '500' }}>
+                                        Belum ada dokumen
+                                    </p>
+                                    <p style={{ fontSize: '0.875rem', marginTop: '0.5rem' }}>
+                                        Klik "Kelola Dokumen" untuk menambahkan dokumen pertama
+                                    </p>
+                                </div>
+                            ) : (
+                                masterItems.map((item, index) => {
+                                    const statusData = yearlyStatuses.find(s => s.master_item_id === item.id);
+                                    const isBottomItem = index >= masterItems.length - 3;
+                                    
+                                    return (
                                         <AuditItem
+                                            key={item.id}
                                             item={item}
                                             yearlyData={statusData}
                                             year={selectedYear}
                                             onUpdate={fetchData}
-                                            openUpwards={isBottomItem} // <--- Pass prop baru ini
+                                            openUpwards={isBottomItem}
                                         />
-                                    </div>
-                                );
-                            })}
+                                    );
+                                })
+                            )}
                         </div>
                     </div>
                 )}
             </main>
+
+            {/* Footer */}
+            <footer style={{
+                backgroundColor: 'white',
+                borderTop: '1px solid #e5e7eb',
+                padding: '1.5rem',
+                marginTop: 'auto'
+            }}>
+                <div style={{
+                    maxWidth: '1024px',
+                    margin: '0 auto',
+                    textAlign: 'center',
+                    color: '#6b7280',
+                    fontSize: '0.875rem',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '0.5rem'
+                }}>
+                    <span>Made with</span>
+                    <span style={{ 
+                        color: '#ef4444', 
+                        fontSize: '1rem',
+                        animation: 'pulse 1.5s ease-in-out infinite'
+                    }}>
+                        ❤️
+                    </span>
+                    <span style={{ fontWeight: '600', color: '#374151' }}>1nkuss</span>
+                </div>
+            </footer>
         </div>
     );
 }
