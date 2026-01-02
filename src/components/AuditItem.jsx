@@ -251,7 +251,7 @@ export default function AuditItem({ item, yearlyData, year, onUpdate, openUpward
                         )}
                     </>
                 )}
-            </div>git branch
+            </div>
         </div>
     );
 }
