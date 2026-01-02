@@ -27,7 +27,6 @@ export default function Dashboard({ session }) {
     const fetchData = async () => {
         setLoading(true);
         try {
-            // Fetch Master Items
             let { data: masters, error: masterError } = await supabase
                 .from('audit_master_items')
                 .select('*')
@@ -35,7 +34,6 @@ export default function Dashboard({ session }) {
 
             if (masterError) throw masterError;
 
-            // Fetch Yearly Statuses
             let { data: statuses, error: statusError } = await supabase
                 .from('audit_yearly_status')
                 .select('*')
@@ -57,13 +55,12 @@ export default function Dashboard({ session }) {
         await supabase.auth.signOut();
     };
 
-    // Calculate progress
     const totalItems = masterItems.length;
     const completedItems = yearlyStatuses.filter(s => s.status === 'completed').length;
     const progressPercentage = totalItems > 0 ? Math.round((completedItems / totalItems) * 100) : 0;
 
     return (
-        <div style={{ minHeight: '100vh', backgroundColor: '#f9fafb', paddingBottom: '5rem' }}>
+        <div style={{ minHeight: '100vh', backgroundColor: '#f9fafb' }}>
             {/* Navbar */}
             <nav style={{
                 backgroundColor: 'white',
@@ -110,12 +107,6 @@ export default function Dashboard({ session }) {
                                 backgroundColor: showMasterManager ? '#eff6ff' : 'transparent',
                                 color: showMasterManager ? '#1e40af' : '#4b5563'
                             }}
-                            onMouseEnter={(e) => {
-                                if (!showMasterManager) e.target.style.backgroundColor = '#f3f4f6'
-                            }}
-                            onMouseLeave={(e) => {
-                                if (!showMasterManager) e.target.style.backgroundColor = 'transparent'
-                            }}
                         >
                             <span style={{ marginRight: '0.5rem', fontSize: '1.125rem' }}>⚙️</span>
                             Kelola Dokumen
@@ -139,11 +130,8 @@ export default function Dashboard({ session }) {
                                 fontWeight: '500',
                                 background: 'transparent',
                                 border: 'none',
-                                cursor: 'pointer',
-                                transition: 'color 0.2s'
+                                cursor: 'pointer'
                             }}
-                            onMouseEnter={(e) => e.target.style.color = '#991b1b'}
-                            onMouseLeave={(e) => e.target.style.color = '#dc2626'}
                         >
                             <span style={{ marginRight: '0.25rem' }}>🚪</span>
                             Logout
@@ -152,15 +140,14 @@ export default function Dashboard({ session }) {
                 </div>
             </nav>
 
-            {/* Main Content Wrapper - Updated paddingBottom here */}
             <main style={{
                 maxWidth: '1024px',
                 margin: '0 auto',
                 padding: '2rem 1.5rem',
-                paddingBottom: '200px' // <--- PERBAIKAN DI SINI (Supaya bisa scroll jauh ke bawah)
+                // PENTING: Padding bawah extra besar agar item terakhir bisa discroll naik
+                paddingBottom: '300px' 
             }}>
                 
-                {/* Master Item Manager */}
                 {showMasterManager && (
                     <MasterItemManager 
                         onClose={() => setShowMasterManager(false)} 
@@ -178,18 +165,10 @@ export default function Dashboard({ session }) {
                     gap: '1rem'
                 }}>
                     <div>
-                        <h2 style={{
-                            fontSize: '1.875rem',
-                            fontWeight: 'bold',
-                            color: '#111827'
-                        }}>
+                        <h2 style={{ fontSize: '1.875rem', fontWeight: 'bold', color: '#111827' }}>
                             Dashboard Audit
                         </h2>
-                        <p style={{
-                            marginTop: '0.25rem',
-                            fontSize: '0.875rem',
-                            color: '#6b7280'
-                        }}>
+                        <p style={{ marginTop: '0.25rem', fontSize: '0.875rem', color: '#6b7280' }}>
                             Status kelengkapan dokumen FEM & ISO 50001
                         </p>
                     </div>
@@ -203,17 +182,7 @@ export default function Dashboard({ session }) {
                         boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
                         border: '1px solid #e5e7eb'
                     }}>
-                        <span style={{
-                            fontSize: '0.75rem',
-                            fontWeight: 'bold',
-                            color: '#9ca3af',
-                            textTransform: 'uppercase',
-                            marginRight: '0.75rem',
-                            letterSpacing: '0.05em'
-                        }}>
-                            Periode Audit
-                        </span>
-                        <span style={{ fontSize: '1.25rem', marginRight: '0.5rem' }}>📅</span>
+                        <span style={{ marginRight: '0.5rem' }}>📅</span>
                         <select
                             value={selectedYear}
                             onChange={(e) => setSelectedYear(parseInt(e.target.value))}
@@ -243,24 +212,11 @@ export default function Dashboard({ session }) {
                     padding: '1.5rem',
                     marginBottom: '1.5rem'
                 }}>
-                    <div style={{
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        alignItems: 'center',
-                        marginBottom: '0.5rem'
-                    }}>
-                        <span style={{
-                            fontSize: '0.875rem',
-                            fontWeight: '500',
-                            color: '#374151'
-                        }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
+                        <span style={{ fontSize: '0.875rem', fontWeight: '500', color: '#374151' }}>
                             Progress Tahun {selectedYear}
                         </span>
-                        <span style={{
-                            fontSize: '0.875rem',
-                            fontWeight: 'bold',
-                            color: '#667eea'
-                        }}>
+                        <span style={{ fontSize: '0.875rem', fontWeight: 'bold', color: '#667eea' }}>
                             {progressPercentage}%
                         </span>
                     </div>
@@ -271,38 +227,18 @@ export default function Dashboard({ session }) {
                         height: '0.75rem',
                         overflow: 'hidden'
                     }}>
-                        <div
-                            style={{
-                                background: 'linear-gradient(to right, #667eea, #22c55e)',
-                                height: '100%',
-                                borderRadius: '9999px',
-                                transition: 'width 0.5s ease',
-                                width: `${progressPercentage}%`
-                            }}
-                        />
-                    </div>
-                    <div style={{
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        marginTop: '0.75rem',
-                        fontSize: '0.75rem',
-                        color: '#6b7280'
-                    }}>
-                        <span>{completedItems} dari {totalItems} item selesai</span>
-                        <span>{totalItems - completedItems} tersisa</span>
+                        <div style={{
+                            background: 'linear-gradient(to right, #667eea, #22c55e)',
+                            height: '100%',
+                            width: `${progressPercentage}%`,
+                            transition: 'width 0.5s ease'
+                        }} />
                     </div>
                 </div>
 
-                {/* Main Content */}
+                {/* Main Content List */}
                 {loading ? (
-                    <div style={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        padding: '5rem 0',
-                        color: '#9ca3af'
-                    }}>
+                    <div style={{ padding: '5rem 0', textAlign: 'center', color: '#9ca3af' }}>
                         <div className="spinner" style={{ marginBottom: '1rem' }} />
                         <p>Memuat data...</p>
                     </div>
@@ -310,9 +246,13 @@ export default function Dashboard({ session }) {
                     <div style={{
                         backgroundColor: 'white',
                         boxShadow: '0 4px 12px rgba(0,0,0,0.08)',
-                        overflow: 'hidden',
+                        // PERBAIKAN UTAMA DI SINI:
+                        // overflow: 'hidden' DIHAPUS supaya dropdown bisa keluar batas kotak
+                        overflow: 'visible', 
                         borderRadius: '1rem',
-                        border: '1px solid #e5e7eb'
+                        border: '1px solid #e5e7eb',
+                        position: 'relative', // Supaya z-index bekerja dengan benar
+                        zIndex: 1
                     }}>
                         <div style={{
                             padding: '1.5rem',
@@ -320,14 +260,13 @@ export default function Dashboard({ session }) {
                             borderBottom: '1px solid #e5e7eb',
                             display: 'flex',
                             justifyContent: 'space-between',
-                            alignItems: 'center'
+                            alignItems: 'center',
+                            // Kembalikan border radius atas manual karena overflow hidden dihapus
+                            borderTopLeftRadius: '1rem',
+                            borderTopRightRadius: '1rem'
                         }}>
-                            <h3 style={{
-                                fontSize: '1.125rem',
-                                fontWeight: 'bold',
-                                color: '#111827'
-                            }}>
-                                Checklist Tahun <span style={{ color: '#667eea' }}>{selectedYear}</span>
+                            <h3 style={{ fontSize: '1.125rem', fontWeight: 'bold', color: '#111827' }}>
+                                Checklist
                             </h3>
                             <span style={{
                                 fontSize: '0.75rem',
@@ -337,31 +276,19 @@ export default function Dashboard({ session }) {
                                 padding: '0.25rem 0.75rem',
                                 borderRadius: '9999px'
                             }}>
-                                Total: {totalItems} Dokumen
+                                Total: {totalItems}
                             </span>
                         </div>
                         
                         <div style={{ borderTop: '1px solid #f3f4f6' }}>
                             {masterItems.length === 0 ? (
-                                <div style={{
-                                    padding: '2.5rem',
-                                    textAlign: 'center'
-                                }}>
-                                    <p style={{ color: '#6b7280', marginBottom: '1rem' }}>
-                                        Belum ada daftar dokumen.
-                                    </p>
+                                <div style={{ padding: '2.5rem', textAlign: 'center' }}>
+                                    <p style={{ color: '#6b7280' }}>Belum ada daftar dokumen.</p>
                                     <button 
                                         onClick={() => setShowMasterManager(true)}
-                                        style={{
-                                            color: '#667eea',
-                                            fontWeight: '600',
-                                            background: 'transparent',
-                                            border: 'none',
-                                            cursor: 'pointer',
-                                            textDecoration: 'underline'
-                                        }}
+                                        style={{ color: '#667eea', fontWeight: '600', background: 'transparent', border: 'none', cursor: 'pointer', marginTop: '1rem' }}
                                     >
-                                        + Tambahkan Dokumen Master
+                                        + Tambahkan Dokumen
                                     </button>
                                 </div>
                             ) : (
@@ -381,16 +308,6 @@ export default function Dashboard({ session }) {
                         </div>
                     </div>
                 )}
-
-                {/* Footer Hint */}
-                <div style={{
-                    marginTop: '1.5rem',
-                    textAlign: 'center',
-                    fontSize: '0.875rem',
-                    color: '#6b7280'
-                }}>
-                    <p>💡 Arahkan kursor ke status untuk mengubahnya</p>
-                </div>
             </main>
         </div>
     );
