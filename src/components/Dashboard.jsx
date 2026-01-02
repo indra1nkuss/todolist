@@ -61,7 +61,6 @@ export default function Dashboard({ session }) {
 
     return (
         <div style={{ minHeight: '100vh', backgroundColor: '#f9fafb' }}>
-            {/* Navbar */}
             <nav style={{
                 backgroundColor: 'white',
                 boxShadow: '0 1px 3px rgba(0,0,0,0.05)',
@@ -70,18 +69,10 @@ export default function Dashboard({ session }) {
                 zIndex: 50
             }}>
                 <div style={{
-                    maxWidth: '1280px',
-                    margin: '0 auto',
-                    padding: '0 1.5rem',
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    height: '4rem',
-                    alignItems: 'center'
+                    maxWidth: '1280px', margin: '0 auto', padding: '0 1.5rem',
+                    display: 'flex', justifyContent: 'space-between', height: '4rem', alignItems: 'center'
                 }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#667eea" strokeWidth="2">
-                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-                        </svg>
                         <h1 style={{ fontSize: '1.25rem', fontWeight: 'bold', color: '#1e3a8a' }}>
                             Energy Audit Tracker
                         </h1>
@@ -90,14 +81,9 @@ export default function Dashboard({ session }) {
                         <button 
                             onClick={() => setShowMasterManager(!showMasterManager)}
                             style={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                padding: '0.5rem 1rem',
-                                fontSize: '0.875rem',
-                                fontWeight: '500',
-                                borderRadius: '0.5rem',
-                                border: 'none',
-                                cursor: 'pointer',
+                                display: 'flex', alignItems: 'center', padding: '0.5rem 1rem',
+                                fontSize: '0.875rem', fontWeight: '500', borderRadius: '0.5rem',
+                                border: 'none', cursor: 'pointer',
                                 backgroundColor: showMasterManager ? '#eff6ff' : 'transparent',
                                 color: showMasterManager ? '#1e40af' : '#4b5563'
                             }}
@@ -105,7 +91,6 @@ export default function Dashboard({ session }) {
                             <span style={{ marginRight: '0.5rem', fontSize: '1.125rem' }}>⚙️</span>
                             Kelola Dokumen
                         </button>
-                        
                         <button
                             onClick={handleLogout}
                             style={{
@@ -123,21 +108,15 @@ export default function Dashboard({ session }) {
                 maxWidth: '1024px',
                 margin: '0 auto',
                 padding: '2rem 1.5rem',
-                // PENTING: Ruang kosong di bawah agar item terakhir bisa discroll naik
-                paddingBottom: '350px' 
+                paddingBottom: '300px' 
             }}>
                 
                 {showMasterManager && (
                     <MasterItemManager onClose={() => setShowMasterManager(false)} onRefresh={fetchData} />
                 )}
 
-                {/* Header Section */}
                 <div style={{
-                    display: 'flex',
-                    flexDirection: window.innerWidth > 768 ? 'row' : 'column',
-                    justifyContent: 'space-between',
-                    alignItems: window.innerWidth > 768 ? 'center' : 'flex-start',
-                    marginBottom: '2rem'
+                    display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem'
                 }}>
                     <div>
                         <h2 style={{ fontSize: '1.875rem', fontWeight: 'bold', color: '#111827' }}>Dashboard Audit</h2>
@@ -145,13 +124,8 @@ export default function Dashboard({ session }) {
                     </div>
                     
                     <div style={{
-                        marginTop: window.innerWidth > 768 ? 0 : '1rem',
-                        backgroundColor: 'white',
-                        padding: '0.5rem 1rem',
-                        borderRadius: '0.5rem',
-                        border: '1px solid #e5e7eb',
-                        display: 'flex',
-                        alignItems: 'center'
+                        backgroundColor: 'white', padding: '0.5rem 1rem', borderRadius: '0.5rem',
+                        border: '1px solid #e5e7eb', display: 'flex', alignItems: 'center'
                     }}>
                         <span style={{ marginRight: '0.5rem' }}>📅</span>
                         <select
@@ -164,7 +138,6 @@ export default function Dashboard({ session }) {
                     </div>
                 </div>
 
-                {/* Progress Bar */}
                 <div style={{
                     backgroundColor: 'white', padding: '1.5rem', borderRadius: '1rem',
                     boxShadow: '0 1px 3px rgba(0,0,0,0.1)', marginBottom: '2rem'
@@ -178,7 +151,6 @@ export default function Dashboard({ session }) {
                     </div>
                 </div>
 
-                {/* Main List Container */}
                 {loading ? (
                     <p style={{ textAlign: 'center', marginTop: '2rem' }}>Memuat data...</p>
                 ) : (
@@ -187,12 +159,10 @@ export default function Dashboard({ session }) {
                         boxShadow: '0 4px 12px rgba(0,0,0,0.08)',
                         borderRadius: '1rem',
                         border: '1px solid #e5e7eb',
-                        // 🔴 KUNCI 1: Hapus overflow hidden, ganti visible
-                        overflow: 'visible', 
+                        overflow: 'visible', // Pastikan tetap visible
                         position: 'relative',
                         zIndex: 1
                     }}>
-                        {/* Header List */}
                         <div style={{
                             padding: '1.5rem',
                             borderBottom: '1px solid #e5e7eb',
@@ -203,32 +173,28 @@ export default function Dashboard({ session }) {
                             <h3 style={{ fontWeight: 'bold' }}>Checklist Dokumen</h3>
                         </div>
 
-                        {/* List Items */}
                         <div style={{ padding: '0' }}>
                             {masterItems.map((item, index) => {
                                 const statusData = yearlyStatuses.find(s => s.master_item_id === item.id);
                                 
-                                // 🔴 KUNCI 2: Z-INDEX MENURUN
-                                // Item 1 z-index = 1000
-                                // Item 2 z-index = 999
-                                // Item 3 z-index = 998
-                                // ...
-                                // Ini memastikan dropdown item atas SELALU muncul DI ATAS item bawahnya
+                                // LOGIKA BARU: Cek apakah ini 3 item terakhir?
+                                // Jika item ke-8, 9, 10 dari total 10 item, maka openUpwards = true
+                                const isBottomItem = index >= masterItems.length - 3;
+                                
+                                // Z-index logic tetap dipertahankan
                                 const itemZIndex = 1000 - index; 
 
                                 return (
                                     <div 
                                         key={item.id} 
-                                        style={{ 
-                                            position: 'relative', 
-                                            zIndex: itemZIndex // Terapkan z-index di sini
-                                        }}
+                                        style={{ position: 'relative', zIndex: itemZIndex }}
                                     >
                                         <AuditItem
                                             item={item}
                                             yearlyData={statusData}
                                             year={selectedYear}
                                             onUpdate={fetchData}
+                                            openUpwards={isBottomItem} // <--- Pass prop baru ini
                                         />
                                     </div>
                                 );
